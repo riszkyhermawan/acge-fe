@@ -1,4 +1,4 @@
-const api = import.meta.env.VITE_API_URL_PROD;
+const api = import.meta.env.VITE_API_URL_DEV;
 
 
 export const login = async (username, password) => {
