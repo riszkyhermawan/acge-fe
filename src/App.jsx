@@ -1,11 +1,11 @@
 import React from "react";
-import Home from "./pages/landing/Home";
+import Home from "./pages/landing/Homepage";
 import { Routes, Route } from "react-router-dom";
-import Login from "./pages/landing/Login";
+import Login from "./pages/landing/Loginpage";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import TeacherDashboard from "./pages/teacher/Dashboard";
 import { StudentProtectedRoute, TeacherProtectedRoute } from "./components/ProtectedRoute";
-import Register from "./pages/landing/Register";
+import Register from "./pages/landing/Registerpage";
 
 const App = () => {
   return (

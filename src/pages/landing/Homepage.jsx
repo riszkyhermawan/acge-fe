@@ -1,7 +1,7 @@
 import bg from "./../../assets/img/bg-home.webp";
 import hero from "./../../assets/img/hero-home.webp";
-import ButtonStudent from "./../../components/button/GettingStarted.jsx";
-import ButtonTeacher from "./../../components/button/LoginTeacher.jsx";
+import ButtonStudent from "../../components/button/GettingStarted.jsx";
+import ButtonTeacher from "../../components/button/LoginTeacher.jsx";
 
 const Home = () => {
   return (
