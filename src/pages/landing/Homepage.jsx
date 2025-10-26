@@ -1,14 +1,11 @@
-import bg from "./../../assets/img/bg-home.webp";
 import hero from "./../../assets/img/hero-home.webp";
 import ButtonStudent from "../../components/button/GettingStarted.jsx";
 import ButtonTeacher from "../../components/button/LoginTeacher.jsx";
+import PrimaryBackground from "./../../components/PrimaryBackground.jsx"
 
 const Home = () => {
   return (
-    <div
-      className="h-screen w-screen flex flex-row items-center justify-center bg-cover"
-      style={{ backgroundImage: `url(${bg})` }}
-    >
+    <PrimaryBackground>
       <div className="w-7xl flex items-center justify-between ">
         <div className="w-full h-fit flex flex-col pr-7">
           <h1 className="text-white font-bold text-6xl  ">
@@ -25,7 +22,7 @@ const Home = () => {
           <img src={hero} alt="" />
         </div>
       </div>
-    </div>
+    </PrimaryBackground>
   );
 };
 
