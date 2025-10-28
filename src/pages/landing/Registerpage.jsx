@@ -5,24 +5,77 @@ import { useNavigate } from "react-router-dom";
 import SimpleInput from "../../components/input/SimpleInput";
 import PrimaryBackground from "../../components/PrimaryBackground";
 
-const Login = () => {
+const RegisterPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [error, setError] = useState({
+    username: "",
+  })
+  const [formError, setFormError] = useState(null);
   const Auth = useAuth();
   const { register } = Auth;
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    
+    if (name === "username") {
+        setUsername(value);
+    } else if (name === "password") {
+        setPassword(value);
+    } else if (name === "fullName") {
+        setFullName(value);
+    }
+
+    validateField(name, value);
+  }
+
+  const validateField = (name, value) => {
+    let errorMsg = "";
+    if (name === "username") {
+        if (!value) {
+            errorMsg = "NIM is required";
+        }
+        if (value && !/^\d{10}$/.test(value)) {
+            errorMsg = "You must enter a valid NIM, you little rascal!";
+        }
+    } 
+    else if (name === "fullName") {
+      if (!value) {
+        errorMsg = "Full Name is required";
+      }
+    } 
+    else if (name === "password") {
+      if (!value) {
+        errorMsg = "Password is required";
+    }
+  }
+
+    setError((prevError) => ({
+        ...prevError,
+        [name]: errorMsg,
+    }));
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
+    setFormError(null);
+    
+    const isFormEmpty = !username 
+    const hasErrors = Object.values(error).some((errorMsg) => errorMsg !== "");
+    if (hasErrors || isFormEmpty) {
+        validateField("username", username);
+        setFormError("Please fix the errors in the form before submitting.");
+        return;
+    }
     
     try {
         await register(username, fullName, password);
         navigate("/login");
     } catch (error) {
-        setError("Registration failed: " + error.message);
+        setFormError("Registration failed: " + error.message);
     }
 
 
@@ -38,22 +91,26 @@ const Login = () => {
                 label="NIM"
                 type="text"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => handleChange(e)}
                 placeholder="Please enter your NIM"
+                error={error.username}
+                name="username"
               />
               <SimpleInput
                 label="Full Name"
                 type="text"
                 value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
+                onChange={(e) => handleChange(e)}
                 placeholder="Please enter your full name"
+                name="fullName"
               />
               <SimpleInput
                 label="Password"
                 type="password"
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+                onChange={(e) => handleChange(e)}
                 placeholder="Please enter your password"
+                name="password"
               />
               <button
                 className="w-full p-6 bg-emerald-500 text-white font-bold text-md rounded-xl mt-4"
@@ -61,7 +118,7 @@ const Login = () => {
               >
                 Submit
               </button>
-              {error && <p className="text-red-500">{error}</p>}
+              {formError && <p className="text-red-500">{formError}</p>}
               <a href="/login" className="mt-4 text-blue-500 underline">
                 Already have an account? Login here.
               </a>
@@ -76,4 +133,4 @@ const Login = () => {
     </PrimaryBackground>
   );
 };
-export default Login;
+export default RegisterPage;

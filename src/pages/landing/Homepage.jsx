@@ -1,6 +1,6 @@
 import hero from "./../../assets/img/hero-home.webp";
-import ButtonStudent from "../../components/button/GettingStarted.jsx";
-import ButtonTeacher from "../../components/button/LoginTeacher.jsx";
+import ButtonStudent from "../../components/button/SpecialButton.jsx";
+import RegisterButton from "../../components/button/SecondaryButton.jsx";
 import PrimaryBackground from "./../../components/PrimaryBackground.jsx"
 
 const Home = () => {
@@ -12,8 +12,14 @@ const Home = () => {
             Tackling Coding Assignments, At ease.
           </h1>
           <div className="w-full space-between flex flex-row items-center gap-4">
-            <ButtonStudent />
-            <ButtonTeacher />
+            <ButtonStudent
+              text = "Let's start coding now!"
+              link = "/login" 
+            />
+            <RegisterButton
+              text="Make an Account"
+              link="/register"
+            />
           </div>
           
         </div>
