@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import SimpleInput from "../../components/input/SimpleInput";
 import PrimaryBackground from "../../components/PrimaryBackground";
+import PrimaryButton from "../../components/button/PrimaryButton";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -49,12 +50,13 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Please enter your password"
               />
-              <button
+              {/* <button
                 className="w-full p-6 bg-emerald-500 text-white font-bold text-md rounded-xl mt-4"
                 type="submit"
               >
                 Login
-              </button>
+              </button> */}
+              <PrimaryButton text="Login" type="submit" className="w-fit" />
               {error && <p className="text-red-500">{error}</p>}
               <a href="/register" className="mt-4 text-blue-500 underline">
                 Don't have an account? Register here.
