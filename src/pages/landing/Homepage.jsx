@@ -3,6 +3,7 @@ import ButtonStudent from "../../components/button/SpecialButton.jsx";
 import RegisterButton from "../../components/button/SecondaryButton.jsx";
 import PrimaryBackground from "./../../components/PrimaryBackground.jsx"
 
+
 const Home = () => {
   return (
     <PrimaryBackground>
@@ -12,16 +13,9 @@ const Home = () => {
             Tackling Coding Assignments, At ease.
           </h1>
           <div className="w-full space-between flex flex-row items-center gap-4">
-            <ButtonStudent
-              text = "Let's start coding now!"
-              link = "/login" 
-            />
-            <RegisterButton
-              text="Make an Account"
-              link="/register"
-            />
+            <ButtonStudent text="Let's start coding now!" link="/login" />
+            <RegisterButton text="Make an Account" link="/register" />
           </div>
-          
         </div>
 
         <div className="w-full h-fit">
