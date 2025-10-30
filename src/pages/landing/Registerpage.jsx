@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import SimpleInput from "../../components/input/SimpleInput";
 import PrimaryBackground from "../../components/PrimaryBackground";
+import PrimaryButton from "../../components/button/PrimaryButton";
 
 const RegisterPage = () => {
   const [username, setUsername] = useState("");
@@ -38,17 +39,17 @@ const RegisterPage = () => {
             errorMsg = "NIM is required";
         }
         if (value && !/^\d{10}$/.test(value)) {
-            errorMsg = "You must enter a valid NIM, you little rascal!";
+            errorMsg = "Don't try to be sneaky, You must provide a valid NIM.";
         }
     } 
     else if (name === "fullName") {
       if (!value) {
-        errorMsg = "Full Name is required";
+        errorMsg = "Use your full name otherwise Pak Med won't be able to credit your exam.";
       }
     } 
     else if (name === "password") {
       if (!value) {
-        errorMsg = "Password is required";
+        errorMsg = "Password is required, do not use your home address neither your pet's name.";
     }
   }
 
@@ -112,12 +113,17 @@ const RegisterPage = () => {
                 placeholder="Please enter your password"
                 name="password"
               />
-              <button
+              {/* <button
                 className="w-full p-6 bg-emerald-500 text-white font-bold text-md rounded-xl mt-4"
                 type="submit"
               >
                 Submit
-              </button>
+              </button> */}
+              <PrimaryButton 
+                text="Submit"
+                type="submit"
+                className="w-fit"
+              />
               {formError && <p className="text-red-500">{formError}</p>}
               <a href="/login" className="mt-4 text-blue-500 underline">
                 Already have an account? Login here.
