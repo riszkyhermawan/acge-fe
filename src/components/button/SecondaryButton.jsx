@@ -7,9 +7,9 @@ const colorStyle = {
     hover: "hover:bg-white hover:text-black", 
   },
   green: {
-    text: "text-green-500",
-    border: "border-2-green-500",
-    hover: "hover:bg-green-500 hover:text-white",
+    text: "text-primary-green",
+    border: "border-2-primary-green",
+    hover: "hover:bg-primary-green-dark ",
   },
 };
 

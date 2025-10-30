@@ -15,3 +15,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@theme {
+  --color-error-dark: #34070B;
+  --color-error: #CF1E2E;
+  --color-primary-green: #4AD05C;
+  --color-primary-green-dark: #172519;
+  --color-midnight: #121212;
+}
