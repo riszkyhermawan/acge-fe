@@ -12,7 +12,7 @@ const StudentDashboard = () => {
             <LogoutButton />
             <div className="w-full mt-12">
                 {QuestionsArray.map((question) => (
-                    <QuestionsCard key={question.id} title={question.title} description={question.description} />
+                    <QuestionsCard key={question.id} title={question.title} description={question.description} qid={question.id} />
                 ))}
             </div>
         </div>
