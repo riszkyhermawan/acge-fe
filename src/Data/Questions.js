@@ -2,7 +2,7 @@ const Questions = {
   question1: {
     id: "11028",
     title: "List Command Processor",
-    question: `### Objective
+    content: `### Objective
 Consider a list (list = \`[]\`). You can perform the following commands:
 
 1.  \`insert i e\`: Insert integer \`e\` at position \`i\`.
