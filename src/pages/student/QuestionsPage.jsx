@@ -4,12 +4,43 @@ import BackButton from "../../components/button/BackButton";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
-
+import { useState } from "react";
+import { useRef } from "react";
 
 const QuestionsPage = () => {
   const question = Questions["question1"];
-  console.log(question);
 
+  const [codeInput, setCodeInput] = useState("");
+  const highlighterRef = useRef(null);
+  const textareaRef = useRef(null);
+
+  const handleScroll = () => {
+    if (textareaRef.current && highlighterRef.current) {
+      highlighterRef.current.scrollLeft = textareaRef.current.scrollLeft;
+      highlighterRef.current.scrollTop = textareaRef.current.scrollTop;
+    }
+  };
+
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const indentation = "  "
+      const start = e.target.selectionStart;
+      const end = e.target.selectionEnd;
+      const value = e.target.value
+
+      const newText = value.substring(0, start) + indentation + value.substring(end);
+      const newCursorPosition = start + indentation.length
+      setCodeInput(newText)
+
+      setTimeout(() => {
+        e.target.focus()
+        e.target.selectionStart = newCursorPosition
+        e.target.selectionEnd = newCursorPosition
+      }, 0)
+    }
+  };
   return (
     <div className="flex flex-col w-screen h-screen gap-2 bg-slate-950 p-6">
       {/* title  */}
@@ -20,10 +51,41 @@ const QuestionsPage = () => {
 
       <div className="h-2/3 w-full flex flex-row gap-2">
         {/* Text Editor */}
-        <div className="w-2/3 h-full rounded-2xl overflow-auto p-4 bg-surface-dark scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar hover:scrollbar-thumb-slate-100/10 scrollbar-track-transparent">
-          <SyntaxHighlighter language="python" style={atomDark} customStyle={{background: 'transparent'}} showLineNumbers>
-            {`# Sample code for ${question.title}\n\ncommands = []\nfor _ in range(int(input())):\n    commands.append(input().strip().split())\n\nlst = []\nfor command in commands:\n    if command[0] == 'insert':\n        lst.insert(int(command[1]), int(command[2]))\n    elif command[0] == 'print':\n        print(lst)\n    elif command[0] == 'remove':\n        lst.remove(int(command[1]))\n    elif command[0] == 'append':\n        lst.append(int(command[1]))\n    elif command[0] == 'sort':\n        lst.sort()\n    elif command[0] == 'pop':\n        lst.pop()\n    elif command[0] == 'reverse':\n        lst.reverse()`}
-          </SyntaxHighlighter>
+        <div
+          className="w-2/3 h-full rounded-2xl overflow-auto p-4 bg-surface-dark  "
+          role="button"
+        >
+          <div className="relative w-full h-full bg-transparent" role="button">
+            <textarea
+              spellCheck={false}
+              ref={textareaRef}
+              className="caret-zinc-50 focus:outline-none bg-transparent font-mono text-transparent absolute pt-[9px] px-[24px] pr[24px] resize-none inset-0 whitespace-nowrap text-[16px] z-10 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar hover:scrollbar-thumb-slate-100/0 scrollbar-track-transparent"
+              value={codeInput}
+              onChange={(e) => setCodeInput(e.target.value)}
+              onScroll={handleScroll}
+              onKeyDown={handleKeyDown}
+            />
+
+            <SyntaxHighlighter
+              ref={highlighterRef}
+              language="python"
+              style={atomDark}
+              customStyle={{
+                flex: "1",
+                inset: 0,
+                fontSize: "16px",
+                position: "absolute",
+                padding: "0px",
+                scrollbarColor: "#4AD05C ",
+                scrollbarWidth: "thin",
+                scrollbarTrackColor: "transparent",
+                scrollbarThumbColor: "#4AD05C ",
+              }}
+              showLineNumbers={true}
+            >
+              {codeInput}
+            </SyntaxHighlighter>
+          </div>
         </div>
 
         {/* Question */}
