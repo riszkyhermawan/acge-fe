@@ -23,3 +23,5 @@
   --color-midnight: #121212;
   --color-surface-dark: #1E1E1E;
 }
+
+@plugin 'tailwind-scrollbar';
