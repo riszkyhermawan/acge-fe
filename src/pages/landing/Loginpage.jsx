@@ -29,6 +29,8 @@ const Login = () => {
       throw error;
     }
   };
+
+  
   return (
     <PrimaryBackground>
       <div className="w-7xl flex items-center justify-center gap-24 ">

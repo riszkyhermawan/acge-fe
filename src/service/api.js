@@ -50,3 +50,32 @@ export const register = async (username, full_name, password) => {
     }
     return await response.json();
 }
+
+
+export const compileCode = async (souce_code, input_data) => {
+    const tokenForCompile = localStorage.getItem("auth_token");
+    const postDATA = {
+        "source_code": souce_code,
+        "input_data": input_data,
+    };
+    try {
+        const response = await fetch(`${api}/compiler/compile`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${tokenForCompile}`
+            },
+            body: JSON.stringify(postDATA),
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+       
+        console.log("Received from backend:", result);
+        return result;
+    } catch (error) {
+        throw new Error(`Failed to compile code: ${error.message}`);
+    }
+}
