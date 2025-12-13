@@ -79,3 +79,81 @@ export const compileCode = async (souce_code, input_data) => {
         throw new Error(`Failed to compile code: ${error.message}`);
     }
 }
+
+export const fetchQuestions = async () => {
+    const tokenForCompile = localStorage.getItem("auth_token");
+    try {
+        const response = await fetch(`${api}/questions/all`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${tokenForCompile}`
+            },
+        });
+        if (!response.ok) {
+            throw new Error("Failed to fetch questions");
+        }
+        return await response.json();
+    } catch (error) {
+        throw new Error(`Failed to fetch questions: ${error.message}`);
+    }
+}
+
+
+export const createQuestions = async(questionData) => {
+    const token = localStorage.getItem("auth_token");
+    try {
+        const response = await fetch(`${api}/questions/create`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(questionData),
+        });
+        if (!response.ok) {
+            throw new Error("Failed to create question");
+        }
+        return await response.json();
+    } catch (error) {
+        throw new Error(`Failed to create question: ${error.message}`);
+    }
+}
+
+export const getQuestionById = async(qid) => {
+    const token = localStorage.getItem("auth_token");
+    try {
+        const response = await fetch(`${api}/questions/${qid}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+            throw new Error("Failed to fetch question");
+        }
+        return await response.json();
+    } catch (error) {
+        throw new Error(`Failed to fetch question: ${error.message}`);
+    }
+}
+
+
+export const updateTestCases = async(qid, testCases) => {
+    const token = localStorage.getItem("auth_token");
+    try {
+        const response = await fetch(`${api}/questions/${qid}/update-test-cases`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(testCases),
+        });
+        if (!response.ok) {
+            throw new Error("Failed to update test cases");
+        }
+        return await response.json();
+    } catch (error) {
+        throw new Error(`Failed to update test cases: ${error.message}`);
+    }
+}
