@@ -23,9 +23,9 @@ const SecondaryButton = ({
       <>
         <Link to={link}>
           <div
-            className={`w-fit mt-8 py-4 px-6 rounded-full shadow-md inline-flex justify-between items-center border-2 cursor-pointer ${currentColorStyle.border} ${currentColorStyle.hover} ${currentColorStyle.text} transition-all duration-300 ease-in-out`}
+            className={`w-fit mt-8 py-2 px-6 rounded-full shadow-md inline-flex justify-between items-center border-2 cursor-pointer ${currentColorStyle.border} ${currentColorStyle.hover} ${currentColorStyle.text} transition-all duration-300 ease-in-out`}
           >
-            <p className={`text-center mx-auto font-bold text-xl `}>{text}</p>
+            <p className={`text-center mx-auto font-bold text-md `}>{text}</p>
           </div>
         </Link>
       </>
