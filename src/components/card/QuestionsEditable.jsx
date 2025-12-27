@@ -31,10 +31,16 @@ const QuestionsEditable = ({ title, description, qid, onDelete }) => {
           <button className="p-1 bg-[#1E2C20] items-center justify-center hover:bg-[#425D46] rounded-lg">
             <img src={openIcon} alt="edit" className="w-[28px] " />
           </button>
-          <button className="p-1 bg-[#4B420D] items-center justify-center hover:bg-[#918016] rounded-lg">
+          <Link
+            to={`/teacher/questions/edit-question/${qid}`}
+            className="p-1 bg-[#4B420D] items-center justify-center hover:bg-[#918016] rounded-lg"
+          >
             <img src={editIcon} alt="edit" className="w-[28px] " />
-          </button>
-          <button className="p-1 bg-[#4B0D0D] items-center justify-center hover:bg-[#910000] rounded-lg" onClick={handleDeleteQuestions}>
+          </Link>
+          <button
+            className="p-1 bg-[#4B0D0D] items-center justify-center hover:bg-[#910000] rounded-lg"
+            onClick={handleDeleteQuestions}
+          >
             <img src={deleteIcon} alt="delete" className="w-[28px] " />
           </button>
         </div>

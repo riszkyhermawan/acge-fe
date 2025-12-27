@@ -9,6 +9,7 @@ import Register from "./pages/landing/Registerpage";
 import QuestionsPage from "./pages/student/QuestionsPage";
 import CreateQuestion from "./pages/teacher/CreateQuestion";
 import AddTestCases from "./pages/teacher/AddTestCases";
+import EditQuestion from "./pages/teacher/EditQuestions";
 
 
 const App = () => {
@@ -39,6 +40,12 @@ const App = () => {
         <Route
           path="/teacher/questions/:qid/add-test-cases"
           element={<AddTestCases />}
+        />
+      </Route>
+      <Route element={<TeacherProtectedRoute />}>
+        <Route
+          path="/teacher/questions/edit-question/:qid"
+          element={<EditQuestion />}
         />
       </Route>
     </Routes>

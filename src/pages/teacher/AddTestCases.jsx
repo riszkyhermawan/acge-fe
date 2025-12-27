@@ -2,12 +2,13 @@ import { useParams } from "react-router-dom";
 import SecondaryBackground from "../../components/SecondaryBackground";
 import { getQuestionById, updateTestCases } from "../../service/api";
 import { useState, useEffect } from "react";
-import SecondaryButton from "../../components/button/SecondaryButton";
 import PrimaryButton from "../../components/button/PrimaryButton";
+import { useNavigate } from "react-router-dom";
 
 const AddTestCases = () => {
   const { qid } = useParams();
   const [test_cases, setTestCases] = useState([]);
+  const navigate = useNavigate();
 
   const handleTestCases = () => {
     setTestCases([...test_cases, {}]);
@@ -85,10 +86,13 @@ const AddTestCases = () => {
     try {
       await updateTestCases(qid, preparedTestCases);
       alert("Test cases updated successfully!");
+      navigate(`/teacher/dashboard`);
     } catch (error) {
       console.error("Failed to update test cases:", error);
       alert("Error updating test cases. Please try again.");
     }
+
+    
   };
 
   return (

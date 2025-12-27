@@ -1,6 +1,8 @@
 const api = import.meta.env.VITE_API_URL_DEV;
 
 
+
+// Auth API
 export const login = async (username, password) => {
     const formData = new URLSearchParams();
     formData.append("username", username);
@@ -52,6 +54,8 @@ export const register = async (username, full_name, password) => {
 }
 
 
+
+// COMPILER API
 export const compileCode = async (souce_code, input_data) => {
     const tokenForCompile = localStorage.getItem("auth_token");
     const postDATA = {
@@ -80,6 +84,9 @@ export const compileCode = async (souce_code, input_data) => {
     }
 }
 
+
+
+// QUESTIONS API
 export const fetchQuestions = async () => {
     const tokenForCompile = localStorage.getItem("auth_token");
     try {
@@ -119,6 +126,27 @@ export const createQuestions = async(questionData) => {
     }
 }
 
+
+export const updateQuestion = async(qid, questionData) => {
+    const token = localStorage.getItem("auth_token");
+    try {
+        const response = await fetch(`${api}/questions/${qid}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(questionData),
+        });
+        if (!response.ok) {
+            throw new Error("Failed to update question");
+        }
+        return await response.json();
+    } catch (error) {
+        throw new Error(`Failed to update question: ${error.message}`);
+    }
+}
+
 export const getQuestionById = async(qid) => {
     const token = localStorage.getItem("auth_token");
     try {
@@ -138,6 +166,29 @@ export const getQuestionById = async(qid) => {
 }
 
 
+
+export const deleteQuestion = async (qid) => {
+  const token = localStorage.getItem("auth_token");
+  try {
+    const response = await fetch(`${api}/questions/${qid}/delete`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Failed to delete question");
+    }
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Failed to delete question: ${error.message}`);
+  }
+};
+
+
+
+// Test Cases API
 export const updateTestCases = async(qid, testCases) => {
     const token = localStorage.getItem("auth_token");
     try {
@@ -158,22 +209,3 @@ export const updateTestCases = async(qid, testCases) => {
     }
 }
 
-
-export const deleteQuestion = async(qid) => {
-    const token = localStorage.getItem("auth_token");
-    try {
-        const response = await fetch(`${api}/questions/${qid}/delete`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-        });
-        if (!response.ok) {
-            throw new Error("Failed to delete question");
-        }
-        return await response.json();
-    } catch (error) {
-        throw new Error(`Failed to delete question: ${error.message}`);
-    }
-}
