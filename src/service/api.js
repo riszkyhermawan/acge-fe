@@ -157,3 +157,23 @@ export const updateTestCases = async(qid, testCases) => {
         throw new Error(`Failed to update test cases: ${error.message}`);
     }
 }
+
+
+export const deleteQuestion = async(qid) => {
+    const token = localStorage.getItem("auth_token");
+    try {
+        const response = await fetch(`${api}/questions/${qid}/delete`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+        });
+        if (!response.ok) {
+            throw new Error("Failed to delete question");
+        }
+        return await response.json();
+    } catch (error) {
+        throw new Error(`Failed to delete question: ${error.message}`);
+    }
+}
