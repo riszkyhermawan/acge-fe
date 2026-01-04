@@ -58,9 +58,18 @@ export const register = async (username, full_name, password) => {
 // COMPILER API
 export const compileCode = async (souce_code, input_data) => {
     const tokenForCompile = localStorage.getItem("auth_token");
+
+    let formattedInput = input_data;
+    if (typeof input_data === "string") {
+        formattedInput = {"user_input": input_data};
+    } else if(!input_data){
+        formattedInput = {"user_input": ""};
+    }
+    
+
     const postDATA = {
         "source_code": souce_code,
-        "input_data": input_data,
+        "input_data": formattedInput,
     };
     try {
         const response = await fetch(`${api}/compiler/compile`, {
@@ -72,6 +81,7 @@ export const compileCode = async (souce_code, input_data) => {
             body: JSON.stringify(postDATA),
         });
         if (!response.ok) {
+            const errorText = await response.text();
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
