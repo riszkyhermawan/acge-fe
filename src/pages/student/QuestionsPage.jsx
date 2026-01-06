@@ -56,6 +56,8 @@ const QuestionsPage = () => {
     setTestResult([]);
     setOutput("Submitting...");
 
+    let passed = true;
+
     const results = [];
     try {
       for (const [index, testCase] of question.test_cases.entries()) {
@@ -73,6 +75,11 @@ const QuestionsPage = () => {
           actualOutput = result.error || "Unknown error";
         }
 
+        if (status === "Failed") {
+          passed = false;
+        }
+
+
         results.push({
           id: index,
           status: status,
@@ -80,7 +87,14 @@ const QuestionsPage = () => {
           expected: testCase.expected_output,
           actual: actualOutput
         });
+
+        setTestResult(results)
       }
+      const finalStatus = passed ? "Passed" : "Failed";
+      await submitAnswer(qid, codeInput, finalStatus);
+
+      console.log("Saved submission with:", finalStatus);
+      
     } catch (error) {
       console.error("Test Failed", error)
       results.push({
@@ -91,7 +105,7 @@ const QuestionsPage = () => {
     }
     setTestResult(results);
     setIsSubmitting(false);
-    setOutput("Submission Complete. Check results below.")
+    setOutput("Submission Complete. Check results below.\n", results)
   };
     
 

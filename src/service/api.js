@@ -220,7 +220,7 @@ export const updateTestCases = async(qid, testCases) => {
 }
 
 // SUBMISSION API
-export const submitAnswer = async (question_id, code) => {
+export const submitAnswer = async (question_id, code, status) => {
     const token = localStorage.getItem("auth_token");
     try {
         const response = await fetch(`${api}/submissions/`, {
@@ -231,7 +231,8 @@ export const submitAnswer = async (question_id, code) => {
             },
             body: JSON.stringify({
                 question_id: question_id,
-                code: code
+                code: code,
+                status: status
             }),
         });
 
