@@ -219,3 +219,47 @@ export const updateTestCases = async(qid, testCases) => {
     }
 }
 
+// SUBMISSION API
+export const submitAnswer = async (question_id, code) => {
+    const token = localStorage.getItem("auth_token");
+    try {
+        const response = await fetch(`${api}/submissions/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                question_id: question_id,
+                code: code
+            }),
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Submission failed: ${errorText}`);
+        }
+        return await response.json();
+    } catch (error) {
+        throw new Error(`Failed to submit answer: ${error.message}`);
+    }
+};
+
+
+export const fetchSubmissions = async (question_id) => {
+    const token = localStorage.getItem("auth_token");
+    try {
+        const response = await fetch(`${api}/submissions/latest/${question_id}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            },
+        });
+        if (!response.ok) {
+            throw new Error("Failed to fetch submissions");
+        }
+        return await response.json();
+    } catch (error) {
+        throw new Error(`Failed to fetch submissions: ${error.message}`);
+    }
+};
