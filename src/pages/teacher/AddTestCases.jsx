@@ -1,13 +1,14 @@
 import { useParams } from "react-router-dom";
-import PrimaryBackground from "../../components/PrimaryBackground";
+import SecondaryBackground from "../../components/SecondaryBackground";
 import { getQuestionById, updateTestCases } from "../../service/api";
 import { useState, useEffect } from "react";
-import SecondaryButton from "../../components/button/SecondaryButton";
 import PrimaryButton from "../../components/button/PrimaryButton";
+import { useNavigate } from "react-router-dom";
 
 const AddTestCases = () => {
   const { qid } = useParams();
   const [test_cases, setTestCases] = useState([]);
+  const navigate = useNavigate();
 
   const handleTestCases = () => {
     setTestCases([...test_cases, {}]);
@@ -85,16 +86,19 @@ const AddTestCases = () => {
     try {
       await updateTestCases(qid, preparedTestCases);
       alert("Test cases updated successfully!");
+      navigate(`/teacher/dashboard`);
     } catch (error) {
       console.error("Failed to update test cases:", error);
       alert("Error updating test cases. Please try again.");
     }
+
+    
   };
 
   return (
     <>
-      <PrimaryBackground>
-        <div className="flex flex-col items-center justify-center w-[1200px] self-start mt-36 ">
+      <SecondaryBackground>
+        <div className="flex flex-col items-center justify-center w-[1200px] self-start mt-4">
           <h1 className="text-4xl font-bold ">
             Add Test Cases for Question {qid}
           </h1>
@@ -103,19 +107,21 @@ const AddTestCases = () => {
               <form onSubmit={handleSubmit}>
                 {test_cases.map((test_case, index) => (
                   <div className="w-full mb-4" key={index}>
-                    <h2 className="text-2xl font-bold">
-                      {" "}
-                      Test Case {index + 1}
-                    </h2>
-                    {index < test_cases.length && (
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteTestCase(index)}
-                        className="text-red-500 hover:text-red-700 font-semibold transition-colors duration-200 p-2"
-                      >
-                        Delete
-                      </button>
-                    )}
+                    <div className="flex flex-row w-full justify-between ">
+                      <h2 className="text-2xl font-bold">
+                        {" "}
+                        Test Case {index + 1}
+                      </h2>
+                      {index < test_cases.length && (
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteTestCase(index)}
+                          className="text-red-500 hover:text-red-700 font-semibold transition-colors duration-200 p-2"
+                        >
+                          Delete
+                        </button>
+                      )}
+                    </div>
 
                     {/* Input */}
                     <label className="text-white font-semibold mt-4">
@@ -174,7 +180,7 @@ const AddTestCases = () => {
             </div>
           </div>
         </div>
-      </PrimaryBackground>
+      </SecondaryBackground>
     </>
   );
 };

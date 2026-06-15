@@ -1,8 +1,8 @@
 import { use, useEffect } from "react";
-import PrimaryBackground from "../../components/PrimaryBackground";
+import SecondaryBackground from "../../components/SecondaryBackground";
 import LogoutButton from "../../components/button/LogoutButton";
 import SecondaryButton from "../../components/button/SecondaryButton";
-import QuestionsCard from "../../components/card/QuestionsCard";
+import QuestionsEditable from "../../components/card/QuestionsEditable";
 // import { Questions } from "../../Data/Questions";
 import { fetchQuestions } from "../../service/api";
 import { useState } from "react";
@@ -11,6 +11,11 @@ import { useState } from "react";
 const TeacherDashboard = () => {
   
   const [questions, setQuestions] = useState([]);
+
+  const handleDelete = (deleteId) => {
+    setQuestions(questions.filter((question) => question.id !== deleteId));
+  };
+
 
   useEffect(() => {
     const getQuestions = async () => {
@@ -23,11 +28,13 @@ const TeacherDashboard = () => {
     };
     getQuestions();
   }, []);
+
+
   
   return (
     <>
-      <PrimaryBackground>
-        <div className="flex flex-col items-center justify-center w-[1200px] self-start mt-36 ">
+      <SecondaryBackground>
+        <div className="flex flex-col items-center justify-center w-[1200px] self-start mt-4 ">
             <LogoutButton />
           <div className="flex flex-row w-[1200px] gap-4 justify-between items-center h-fit mt-12">
             <h1 className="text-4xl font-bold ">Question Lists</h1>
@@ -39,17 +46,17 @@ const TeacherDashboard = () => {
           </div>
           <div className="w-full mt-6 flex flex-col gap-4">
             {questions.map((question) => (
-              console.log(question),
-              <QuestionsCard
+              <QuestionsEditable
                 key={question.id}
                 title={question.title}
                 description={question.description}
                 qid={question.id}
+                onDelete={handleDelete}
               />
             ))}
           </div>
         </div>
-      </PrimaryBackground>
+      </SecondaryBackground>
     </>
   );
 };
