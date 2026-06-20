@@ -108,9 +108,9 @@ const AddTestCases = () => {
           </h1>
           <div className="w-full min-h-[600px] bg-[#1E1E1E] mt-4 rounded-lg flex flex-col items-start justify-start p-6">
             <div className="w-full" data-color-mode="dark">
-              <div className="w-full flex flex-row gap-2 items-center justify-start mb-4 bg-yellow-200/50 p-2 rounded-md border-2 border-yellow-400">
+              <div className="w-full flex flex-row gap-2 items-center justify-start mb-4 bg-yellow-200/15 py-2 px-4 rounded-md border-2 border-yellow-400">
                 <p className="text-yellow-500 font-semibold">
-                  Notes: Format your test cases with JSON Format
+                  Notes: Test Cases 1 & 2 will be shown to Students as Example Test Cases. The rest of the test cases will still be used for evaluation but not shown.
                 </p>
               </div>
               <form onSubmit={handleSubmit}>
