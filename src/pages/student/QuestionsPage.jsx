@@ -14,6 +14,7 @@ import PrimaryButton from "../../components/button/PrimaryButton";
 import { compileCode } from "./../../service/api";
 import TestCases from "../../components/card/TestCases";
 import SecondaryButton from "../../components/button/SecondaryButton";
+import remarkGfm from "remark-gfm";
 
 const QuestionsPage = () => {
   const { qid } = useParams();
@@ -187,7 +188,9 @@ const QuestionsPage = () => {
 
               <div className="flex-1 overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar hover:scrollbar-thumb-slate-100/10 scrollbar-track-transparent">
                 <div className="flex flex-col gap-2  justify-between">
-                  <ReactMarkdown>{question.description}</ReactMarkdown>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                    {question.description}
+                  </ReactMarkdown>
                 </div>
               </div>
               {console.log("Attachment URL:", question.attachment_url)}
