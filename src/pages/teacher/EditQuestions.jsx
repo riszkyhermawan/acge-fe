@@ -11,16 +11,19 @@ import { getQuestionById } from "../../service/api";
 import { useParams } from "react-router-dom";
 import SecondaryButton from "../../components/button/SecondaryButton";
 import SecondaryBackground from "../../components/SecondaryBackground";
+import SmallModal from "../../components/modal/SmallModal";
 
 const EditQuestion = () => {
   const { qid } = useParams();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState(
-    "Write your question here using markdown format..."
+    "Write your question here using markdown format...",
   );
   const [attachment, setAttachment] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadFileName, setUploadFileName] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,10 +34,10 @@ const EditQuestion = () => {
         setTitle(data.title);
         setDescription(data.description);
 
-         if (data.attachment_url) {
-           const fileName = data.attachment_url.split("/").pop();
-           setUploadFileName(decodeURIComponent(fileName));
-         }
+        if (data.attachment_url) {
+          const fileName = data.attachment_url.split("/").pop();
+          setUploadFileName(decodeURIComponent(fileName));
+        }
       } catch (error) {
         console.error("Error fetching question details:", error);
       }
@@ -46,8 +49,19 @@ const EditQuestion = () => {
     const file = e.target.files[0];
     if (!file) return;
 
+    const allowedTypes = [
+      "image/png",
+      "image/jpeg",
+      "image/webp",
+      "application/pdf",
+    ];
+    if (!allowedTypes.includes(file.type)) {
+      setShowErrorModal(true); // or setErrorModal
+      return;
+    }
+
     if (file.size > 2 * 1024 * 1024) {
-      alert("File size exceeds 2MB limit.");
+      setShowErrorModal(true);
       return;
     }
     setAttachment(file);
@@ -90,23 +104,15 @@ const EditQuestion = () => {
         description: description,
         attachment_url: publicUrl || finalAttachmentUrl,
       };
-
-      console.log("Ready to send to backend:", payload);
-
-      alert("Success!");
-
+      //debugging
+      // console.log("Ready to send to backend:", payload);
+      setShowSuccessModal(true);
       const response = await updateQuestion(qid, payload);
-      console.log("Response from backend:", response);
-      navigate(`/teacher/questions/${qid}/add-test-cases`);
-    //   const questionsId = response.id;
-    //   if (questionsId) {
-    //     navigate(`/teacher/questions/${questionsId}/add-test-cases`);
-    //   } else {
-    //     alert("Updated, but no ID returned.");
-    //   }
+      //debugging
+      // console.log("Response from backend:", response);
     } catch (error) {
       console.error("Error:", error.message);
-      alert("Failed to upload: " + error.message);
+      setShowErrorModal(true);
     } finally {
       setIsUploading(false);
     }
@@ -222,13 +228,6 @@ const EditQuestion = () => {
                 </div>
 
                 <div className="flex flex-row w-full gap-4">
-                  {/* <PrimaryButton
-                      text={"Edit Test Cases"}
-                      type="submit"
-                      primaryColor="noColor"
-                      className="w-full"
-                      onClick={handleSubmit}
-                    /> */}
                   <PrimaryButton
                     text="Next"
                     type="submit"
@@ -240,6 +239,50 @@ const EditQuestion = () => {
             </div>
           </div>
         </div>
+        <SmallModal
+          isOpen={showErrorModal}
+          onClose={() => setShowErrorModal(false)}
+          title="Upload Error"
+        >
+          <p className="mb-4 text-white text-sm">
+            Invalid file type or file too large. Please upload a PNG, JPG, WEBP,
+            or PDF file under 2MB.
+          </p>
+          <PrimaryButton
+            text="Close"
+            onClick={() => setShowErrorModal(false)}
+            className="w-fit"
+          />
+        </SmallModal>
+        <SmallModal
+          isOpen={showSuccessModal}
+          onClose={() => setShowSuccessModal(false)}
+          title="Question Updated Successfully!"
+        >
+          <div className="flex flex-col gap-3">
+            <p className="mb-2 text-gray-300">
+              What would you like to do next?
+            </p>
+            <div className="w-full flex flex-col gap-0">
+              <PrimaryButton
+                primaryColor="noColor"
+                text="Edit Test Cases"
+                onClick={() => {
+                  setShowSuccessModal(false);
+                  navigate(`/teacher/questions/${qid}/add-test-cases`);
+                }}
+              />
+              <PrimaryButton
+                text="Save & Go to Dashboard"
+                primaryColor="primary"
+                onClick={() => {
+                  setShowSuccessModal(false);
+                  navigate("/teacher/dashboard");
+                }}
+              />
+            </div>
+          </div>
+        </SmallModal>
       </SecondaryBackground>
     </>
   );
