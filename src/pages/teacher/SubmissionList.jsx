@@ -38,6 +38,7 @@ const SubmissionList = () => {
                 username={submission.username}  
                 status={submission.status}
                 full_name={submission.full_name}
+                submissionId={submission.id}
                 />
             ))}
           </div>

@@ -11,6 +11,7 @@ import CreateQuestion from "./pages/teacher/CreateQuestion";
 import AddTestCases from "./pages/teacher/AddTestCases";
 import EditQuestion from "./pages/teacher/EditQuestions";
 import SubmissionList from "./pages/teacher/SubmissionList";
+import SubmissionDetail from "./pages/teacher/SubmissionDetail";
 
 
 const App = () => {
@@ -54,6 +55,13 @@ const App = () => {
         <Route
           path="/teacher/questions/:qid/submissions"
           element={<SubmissionList />}
+        />
+      </Route>
+
+      <Route element={<TeacherProtectedRoute />}>
+        <Route
+          path="/teacher/questions/:qid/submissions/:submissionId"
+          element={<SubmissionDetail />}
         />
       </Route>
     </Routes>

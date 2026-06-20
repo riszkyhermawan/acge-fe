@@ -1,6 +1,8 @@
 import SecondaryButton from "../button/SecondaryButton";
+import { useParams } from "react-router-dom";
 
-const Submission = ({  status, username, full_name }) => {
+const Submission = ({  status, username, full_name, submissionId }) => {
+    const { qid } = useParams();
     return (
       <div className="flex flex-row items-center justify-between bg-black-400/25 bg-clip-padding backdrop-filter backdrop-blur-lg border-2 border-gray-100 rounded-2xl shadow-md px-6 py-4">
         <div className="w-full text-white flex flex-col px-2">
@@ -21,8 +23,8 @@ const Submission = ({  status, username, full_name }) => {
           </span>
 
           <SecondaryButton
-            text="Solve"
-            // link={`/student/dashboard/questions/${submissionId}`}
+            text="Detail"
+            link={`/teacher/questions/${qid}/submissions/${submissionId}`}
             primaryColor="green"
           />
         </div>
