@@ -238,11 +238,16 @@ export const fetchSubmissions = async (question_id) => {
     const response = await authenticatedFetch(`${api}/submissions/latest/${question_id}`, {
       method: "GET",
     });
+    if(response.status === 404) {
+      return null;
+    }
+
+
     if (!response.ok) {
       throw new Error("Failed to fetch submissions");
     }
     return await response.json();
   } catch (error) {
-    throw new Error(`Failed to fetch submissions: ${error.message}`);
+    throw error;
   }
 };
