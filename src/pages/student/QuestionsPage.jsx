@@ -140,31 +140,21 @@ const QuestionsPage = () => {
         </div>
 
         <div className="flex-1 w-full flex flex-row gap-2">
-          {/* Text Editor */}
-          <TextEditor code={codeInput} onCodeChange={setCodeInput} />
+          {/* Left side: Text Editor + Terminal  */}
+          <div className="flex flex-col gap-2 flex-1">
+            {/* Text Editor */}
+            <TextEditor
+              className="w-full"
+              code={codeInput}
+              onCodeChange={setCodeInput}
+            />
 
-          {/* Question */}
-          <div className="w-1/3 h-full bg-surface-dark rounded-2xl scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar hover:scrollbar-thumb-slate-100/10 scrollbar-track-transparent overflow-auto p-4 text-lg">
-            <h1 className="text-xl font-bold mb-2 text-center">Question</h1>
-            <div className="text-[16px]">
-              <ReactMarkdown>{question.description}</ReactMarkdown>
-            </div>
-          </div>
-        </div>
-
-        <div className="h-auto flex flex-row gap-2">
-          <div className="flex flex-col gap-2 w-2/3">
-            <div className="w-full bg-slate-950 h-fit py-1 px-4 rounded-2xl">
-              <p className=" rounded-xl text-amber-400 text-xl">
-                Note: "Please use input() to read data and print() to output the
-                answer."
-              </p>
-            </div>
-            <div className="w-full bg-surface-dark h-full p-4 rounded-2xl scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar hover:scrollbar-thumb-slate-100/10 scrollbar-track-transparent overflow-auto">
+            {/* Terminal (1/4) */}
+            <div className="h-[25%] bg-surface-dark p-4 rounded-2xl">
               <h1>
                 <img
                   src={terminalLogo}
-                  alt="output logo"
+                  alt="output"
                   className="w-6 h-6 inline-block mr-2 mb-1"
                 />
                 Output
@@ -173,9 +163,23 @@ const QuestionsPage = () => {
             </div>
           </div>
 
-          <div className="w-1/3 bg-surface-dark p-2 rounded-2xl h-full">
-            <TestCases test_cases={question.test_cases} results={testResult} />
-            <div className="w-full flex flex-row gap-1">
+          {/* Right side: Question + TestCases + Buttons */}
+          <div className="w-1/3 flex flex-col gap-2">
+            {/* Question */}
+            <div className="bg-surface-dark rounded-2xl overflow-auto p-4 h-1/2 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar hover:scrollbar-thumb-slate-100/10 scrollbar-track-transparent">
+              <h1 className="text-xl font-bold mb-2 text-center">Question</h1>
+              <ReactMarkdown>{question.description}</ReactMarkdown>
+            </div>
+
+            {/* Test Cases + Buttons */}
+            <div className="bg-surface-dark p-2 rounded-2xl flex-1 overflow-auto scroll-smooth scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar hover:scrollbar-thumb-slate-100/10 scrollbar-track-transparent">
+              <TestCases
+                test_cases={question.test_cases}
+                results={testResult}
+              />
+            </div>
+
+            <div className="flex flex-row gap-1">
               <PrimaryButton
                 text="Run Code"
                 primaryColor="noColor"
