@@ -28,9 +28,15 @@ const QuestionsEditable = ({ title, description, qid, onDelete }) => {
           ID : {qid}
         </span>
         <div className="flex flex-row gap-2 mt-2">
-          <button className="p-1 bg-[#1E2C20] items-center justify-center hover:bg-[#425D46] rounded-lg">
-            <img src={openIcon} alt="edit" className="w-[28px] " />
-          </button>
+          <Link
+            to={`/teacher/questions/${qid}/submissions`}
+            className="p-1 bg-[#1E2C20] items-center justify-center hover:bg-[#425D46] rounded-lg"
+          >
+            <img src={openIcon} alt="open" className="w-[28px] " />
+          </Link>
+          {/* <button className="p-1 bg-[#1E2C20] items-center justify-center hover:bg-[#425D46] rounded-lg">
+            <img src={openIcon} alt="open" className="w-[28px] " />
+          </button> */}
           <Link
             to={`/teacher/questions/edit-question/${qid}`}
             className="p-1 bg-[#4B420D] items-center justify-center hover:bg-[#918016] rounded-lg"

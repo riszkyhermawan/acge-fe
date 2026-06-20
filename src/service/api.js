@@ -251,3 +251,32 @@ export const fetchSubmissions = async (question_id) => {
     throw error;
   }
 };
+
+
+export const fetchSubmisionByQuestionId = async (question_id) => {
+  try {
+    const response = await authenticatedFetch(`${api}/submissions/by_question/${question_id}`)
+    if (!response.ok) {
+      throw new Error("Failed to fetch submissions");
+    }
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const fetchSubmissionById = async (submission_id) => {
+  try {
+    const response = await authenticatedFetch(`${api}/submissions/${submission_id}`, {
+      method: "GET",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch submission");
+    }
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
