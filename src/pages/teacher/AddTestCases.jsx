@@ -4,11 +4,16 @@ import { getQuestionById, updateTestCases } from "../../service/api";
 import { useState, useEffect } from "react";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import { useNavigate } from "react-router-dom";
+import JSONEditor from "../../components/card/JSONEditor"
+import SmallModal from "../../components/modal/SmallModal";
 
 const AddTestCases = () => {
   const { qid } = useParams();
   const [test_cases, setTestCases] = useState([]);
   const navigate = useNavigate();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorModalMessage] = useState("");
 
   const handleTestCases = () => {
     setTestCases([...test_cases, {}]);
@@ -64,10 +69,10 @@ const AddTestCases = () => {
               ? JSON.parse(caseItem.expected_output)
               : caseItem.expected_output;
 
-          const expectedOutput = { result: parsedOutputValue };
+          
           return {
             input_data: inputData,
-            expected_output: expectedOutput,
+            expected_output: parsedOutputValue,
           };
         } catch (error) {
           parsingError = true;
@@ -76,20 +81,19 @@ const AddTestCases = () => {
       });
 
     if (parsingError) {
-      alert(
-        "Error: One or more test cases contain invalid JSON data. Please ensure your input is a valid JSON object (e.g., wrapped in curly braces {} and using double quotes for keys/strings)."
-      );
+      setErrorModalMessage("One or more test cases have invalid JSON format. Please correct them before submitting.");
+      setShowErrorModal(true);
       return;
     }
 
     console.log("We're gonna send this", preparedTestCases);
     try {
       await updateTestCases(qid, preparedTestCases);
-      alert("Test cases updated successfully!");
-      navigate(`/teacher/dashboard`);
+      setShowSuccessModal(true);
     } catch (error) {
       console.error("Failed to update test cases:", error);
-      alert("Error updating test cases. Please try again.");
+      setErrorModalMessage("Failed to update test cases. Please try again.");
+      setShowErrorModal(true);
     }
 
     
@@ -104,6 +108,11 @@ const AddTestCases = () => {
           </h1>
           <div className="w-full min-h-[600px] bg-[#1E1E1E] mt-4 rounded-lg flex flex-col items-start justify-start p-6">
             <div className="w-full" data-color-mode="dark">
+              <div className="w-full flex flex-row gap-2 items-center justify-start mb-4 bg-yellow-200/50 p-2 rounded-md border-2 border-yellow-400">
+                <p className="text-yellow-500 font-semibold">
+                  Notes: Format your test cases with JSON Format
+                </p>
+              </div>
               <form onSubmit={handleSubmit}>
                 {test_cases.map((test_case, index) => (
                   <div className="w-full mb-4" key={index}>
@@ -127,59 +136,88 @@ const AddTestCases = () => {
                     <label className="text-white font-semibold mt-4">
                       Input:
                     </label>
-                    <input
-                      type="text"
-                      placeholder="Input"
+                    <JSONEditor
                       value={
                         typeof test_case.input_data === "object"
-                          ? JSON.stringify(test_case.input_data)
+                          ? JSON.stringify(test_case.input_data, null, 2)
                           : test_case.input_data || ""
                       }
-                      onChange={(e) =>
-                        handleInputChange(index, "input_data", e.target.value)
+                      onChange={(value) =>
+                        handleInputChange(index, "input_data", value)
                       }
-                      className="w-full p-3 rounded-lg mb-4 bg-[#363636] text-white  focus:outline-none mt-2"
+                      placeholder='{ "variable": "value" }'
                     />
 
                     {/* Output */}
                     <label className="text-white font-semibold mt-4">
                       Output:
                     </label>
-                    <input
-                      type="text"
-                      placeholder="Output"
+                    <JSONEditor
                       value={
                         typeof test_case.expected_output === "object"
-                          ? JSON.stringify(test_case.expected_output.result)
+                          ? JSON.stringify(test_case.expected_output, null, 2)
                           : test_case.expected_output || ""
                       }
-                      onChange={(e) =>
-                        handleInputChange(
-                          index,
-                          "expected_output",
-                          e.target.value
-                        )
+                      onChange={(value) =>
+                        handleInputChange(index, "expected_output", value)
                       }
-                      className="w-full p-3 rounded-lg mb-4 bg-[#363636] text-white  focus:outline-none mt-2"
+                      placeholder='{ "variable": "value" }'
                     />
 
                     {/* Button */}
                   </div>
                 ))}
                 <div className="flex flex-row gap-4 justify-between w-full">
-                  <button
+                  {/* <button
                     type="button"
                     onClick={handleTestCases}
                     className="w-fit py-2 px-6 rounded-full shadow-md inline-flex items-center border-2 border-primary-green text-primary-green hover:bg-primary-green-dark transition-all duration-300 ease-in-out font-bold text-md cursor-pointer"
                   >
                     + Add Another Test Case
-                  </button>
+                  </button> */}
+                  <PrimaryButton
+                    text="Add another Test Case"
+                    onClick={handleTestCases}
+                    primaryColor="noColor"
+                    type="button"
+                  />
                   <PrimaryButton text="Save Test Cases" type="submit" />
                 </div>
               </form>
             </div>
           </div>
         </div>
+
+        <SmallModal
+          isOpen={showErrorModal}
+          onClose={() => setShowErrorModal(false)}
+          title="Error"
+        >
+          <p className="mb-4 text-gray-300">{errorMessage}</p>
+          <PrimaryButton
+            text="Close"
+            onClick={() => setShowErrorModal(false)}
+            className="w-fit"
+          />
+        </SmallModal>
+
+        <SmallModal
+          isOpen={showSuccessModal}
+          onClose={() => {
+            setShowSuccessModal(false);
+            navigate(`/teacher/dashboard`);
+          }}
+          title="Success!"
+        >
+          <p className="mb-4 text-gray-300">Test cases saved successfully!</p>
+          <PrimaryButton
+            text="Go to Dashboard"
+            onClick={() => {
+              setShowSuccessModal(false);
+              navigate(`/teacher/dashboard`);
+            }}
+          />
+        </SmallModal>
       </SecondaryBackground>
     </>
   );

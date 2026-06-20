@@ -131,15 +131,15 @@ const QuestionsPage = () => {
   };
 
   return (
-    <div className="flex flex-col w-screen h-screen p-16 bg-slate-950 scroll-smooth">
+    <div className="flex flex-col w-screen h-screen p-16 bg-slate-950 scroll-smooth overflow-hidden">
       <div className="max-w-[1440px] w-full h-full flex flex-col mx-auto gap-2">
         {/* title  */}
         <div className="w-full flex flex-row gap-4 items-center justify-start">
           <BackButton />
-          <h1 className="text-4xl  text-center">{question.title}</h1>
+          <h1 className="text-4xl font-bold  text-center">{question.title}</h1>
         </div>
 
-        <div className="h-2/3 w-full flex flex-row gap-2">
+        <div className="flex-1 w-full flex flex-row gap-2">
           {/* Text Editor */}
           <TextEditor code={codeInput} onCodeChange={setCodeInput} />
 
@@ -152,7 +152,7 @@ const QuestionsPage = () => {
           </div>
         </div>
 
-        <div className="h-1/3 flex flex-row gap-2">
+        <div className="h-auto flex flex-row gap-2">
           <div className="flex flex-col gap-2 w-2/3">
             <div className="w-full bg-slate-950 h-fit py-1 px-4 rounded-2xl">
               <p className=" rounded-xl text-amber-400 text-xl">

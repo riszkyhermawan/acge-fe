@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import SimpleInput from "../../components/input/SimpleInput";
 import PrimaryBackground from "../../components/PrimaryBackground";
 import PrimaryButton from "../../components/button/PrimaryButton";
+import SmallModal from "../../components/modal/SmallModal";
+
 
 const RegisterPage = () => {
   const [username, setUsername] = useState("");
@@ -17,6 +19,7 @@ const RegisterPage = () => {
   const Auth = useAuth();
   const { register } = Auth;
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -74,7 +77,11 @@ const RegisterPage = () => {
     
     try {
         await register(username, fullName, password);
-        navigate("/login");
+        setIsModalOpen(true);
+        setTimeout(() => {
+            setIsModalOpen(false);
+            navigate("/login");
+        }, 2000);
     } catch (error) {
         setFormError("Registration failed: " + error.message);
     }
@@ -86,7 +93,9 @@ const RegisterPage = () => {
       <div className="w-7xl flex items-center justify-between gap-24">
         <div className="flex flex-col w-full justify-end">
           <div className="h-fit w-full bg-[#121212] text-white flex flex-col border-slate-200 border-2 rounded-2xl p-9">
-            <h1 className="text-4xl font-bold">Register Using Your Student Registration Number</h1>
+            <h1 className="text-4xl font-bold">
+              Register Using Your Student Registration Number
+            </h1>
             <form onSubmit={handleSubmit} className="flex flex-col gap-2 mt-4">
               <SimpleInput
                 label="NIM"
@@ -119,11 +128,7 @@ const RegisterPage = () => {
               >
                 Submit
               </button> */}
-              <PrimaryButton 
-                text="Submit"
-                type="submit"
-                className="w-fit"
-              />
+              <PrimaryButton text="Submit" type="submit" className="w-fit" />
               {formError && <p className="text-red-500">{formError}</p>}
               <a href="/login" className="mt-4 text-blue-500 underline">
                 Already have an account? Login here.
@@ -136,6 +141,36 @@ const RegisterPage = () => {
           <img src={hero} alt="" />
         </div>
       </div>
+
+      {isModalOpen && (
+        <SmallModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            navigate("/login");
+          }}
+          title="Registration Successful"
+        >
+
+          <p className="mb-4 text-white text-sm">Go back to login page and enter your credentials.</p>
+          <PrimaryButton
+            text="Go to Login"
+            onClick={() => {
+              setIsModalOpen(false);
+              navigate("/login");
+            }}
+            primaryColor="noColor"
+          />
+        </SmallModal>
+      )}
+
+      {/* TEMPORARY DEBUG BUTTON - DELETE LATER */}
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="bg-red-500 text-white px-4 py-2 mb-4"
+      >
+        DEBUG: Show Modal
+      </button>
     </PrimaryBackground>
   );
 };
