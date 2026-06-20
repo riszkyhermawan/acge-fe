@@ -10,6 +10,7 @@ import QuestionsPage from "./pages/student/QuestionsPage";
 import CreateQuestion from "./pages/teacher/CreateQuestion";
 import AddTestCases from "./pages/teacher/AddTestCases";
 import EditQuestion from "./pages/teacher/EditQuestions";
+import SubmissionList from "./pages/teacher/SubmissionList";
 
 
 const App = () => {
@@ -46,6 +47,13 @@ const App = () => {
         <Route
           path="/teacher/questions/edit-question/:qid"
           element={<EditQuestion />}
+        />
+      </Route>
+
+      <Route element={<TeacherProtectedRoute />}>
+        <Route
+          path="/teacher/questions/:qid/submissions"
+          element={<SubmissionList />}
         />
       </Route>
     </Routes>
