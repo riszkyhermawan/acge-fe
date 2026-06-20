@@ -7,7 +7,7 @@ const TestCases = ({ test_cases, results }) => {
   }
 
   return (
-    <div className="w-full h-full max-h-[400px] bg-transparent rounded-2xl p-2 overflow-auto scrollbar-thin scrollbar-thumb-gray-600">
+    <div className="w-full flex-1 bg-transparent rounded-2xl p-2 overflow-auto scrollbar-thin scrollbar-thumb-gray-600">
       {/* EXAMPLE TEST CASES */}
       <h1 className="text-lg font-bold text-start mb-2">Example Test Cases</h1>
       <div className="flex flex-col gap-2 mb-6">
@@ -24,7 +24,7 @@ const TestCases = ({ test_cases, results }) => {
           return (
             <div
               key={index}
-              className={`w-full rounded-lg p-3 border-2 transition-all ${statusClass}`}
+              className={`w-full max-h-[400px] rounded-lg p-3 border-2 transition-all ${statusClass}`}
             >
               {/* Input */}
               <h2 className="font-semibold text-sm text-gray-300">Input:</h2>

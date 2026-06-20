@@ -38,7 +38,7 @@ const TextEditor = ({ code, onCodeChange }) => {
 
   return (
     <div
-      className="w-2/3 h-full rounded-2xl overflow-auto p-4 bg-surface-dark scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar hover:scrollbar-thumb-slate-100/10 scrollbar-track-transparent"
+      className="w-full h-full rounded-2xl overflow-auto p-4 bg-surface-dark scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar hover:scrollbar-thumb-slate-100/10 scrollbar-track-transparent"
       role="button"
     >
       <h1>
