@@ -15,7 +15,7 @@ export const AuthProvider = ({children}) => {
             const tokenData = localStorage.getItem("auth_token");
             if (tokenData) {
                 try {
-                    const userData = await getMe(tokenData);
+                    const userData = await getMe();
                     setUser(userData);
                 } catch (error) {
                     console.error("Failed to fetch user data:", error);
