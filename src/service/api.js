@@ -2,6 +2,26 @@ const api = import.meta.env.PROD
   ? import.meta.env.VITE_API_URL_PROD
   : import.meta.env.VITE_API_URL_DEV;
 
+export const authenticatedFetch = async (url, options = {}) => {
+  const token = localStorage.getItem("auth_token");
+
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      ...options.headers,
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (response.status === 401) {
+    localStorage.removeItem("auth_token");
+    window.location.href = "/login";
+    return null;
+  }
+
+  return response;
+};
+
 // Auth API
 export const login = async (username, password) => {
   const formData = new URLSearchParams();
@@ -20,11 +40,8 @@ export const login = async (username, password) => {
 };
 
 export const getMe = async (token) => {
-  const response = await fetch(`${api}/auth/me`, {
+  const response = await authenticatedFetch(`${api}/auth/me`, {
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   });
   if (!response.ok) {
     throw new Error("Failed to fetch user data");
@@ -52,8 +69,7 @@ export const register = async (username, full_name, password) => {
 
 // COMPILER API
 export const compileCode = async (souce_code, input_data) => {
-  const tokenForCompile = localStorage.getItem("auth_token");
-
+  
   let formattedInput = input_data;
   if (typeof input_data === "string") {
     formattedInput = { user_input: input_data };
@@ -66,11 +82,10 @@ export const compileCode = async (souce_code, input_data) => {
     input_data: formattedInput,
   };
   try {
-    const response = await fetch(`${api}/compiler/compile`, {
+    const response = await authenticatedFetch(`${api}/compiler/compile`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${tokenForCompile}`,
       },
       body: JSON.stringify(postDATA),
     });
@@ -90,13 +105,10 @@ export const compileCode = async (souce_code, input_data) => {
 
 // QUESTIONS API
 export const fetchQuestions = async () => {
-  const tokenForCompile = localStorage.getItem("auth_token");
+  
   try {
-    const response = await fetch(`${api}/questions/all`, {
+    const response = await authenticatedFetch(`${api}/questions/all`, {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${tokenForCompile}`,
-      },
     });
     if (!response.ok) {
       throw new Error("Failed to fetch questions");
@@ -108,13 +120,12 @@ export const fetchQuestions = async () => {
 };
 
 export const createQuestions = async (questionData) => {
-  const token = localStorage.getItem("auth_token");
+  
   try {
-    const response = await fetch(`${api}/questions/create`, {
+    const response = await authenticatedFetch(`${api}/questions/create`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(questionData),
     });
@@ -128,13 +139,11 @@ export const createQuestions = async (questionData) => {
 };
 
 export const updateQuestion = async (qid, questionData) => {
-  const token = localStorage.getItem("auth_token");
   try {
-    const response = await fetch(`${api}/questions/${qid}`, {
+    const response = await authenticatedFetch(`${api}/questions/${qid}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(questionData),
     });
@@ -148,13 +157,9 @@ export const updateQuestion = async (qid, questionData) => {
 };
 
 export const getQuestionById = async (qid) => {
-  const token = localStorage.getItem("auth_token");
   try {
-    const response = await fetch(`${api}/questions/${qid}`, {
+    const response = await authenticatedFetch(`${api}/questions/${qid}`, {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     });
     if (!response.ok) {
       throw new Error("Failed to fetch question");
@@ -166,13 +171,12 @@ export const getQuestionById = async (qid) => {
 };
 
 export const deleteQuestion = async (qid) => {
-  const token = localStorage.getItem("auth_token");
+  
   try {
-    const response = await fetch(`${api}/questions/${qid}/delete`, {
+    const response = await authenticatedFetch(`${api}/questions/${qid}/delete`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
     });
     if (!response.ok) {
@@ -186,13 +190,12 @@ export const deleteQuestion = async (qid) => {
 
 // Test Cases API
 export const updateTestCases = async (qid, testCases) => {
-  const token = localStorage.getItem("auth_token");
+  
   try {
-    const response = await fetch(`${api}/questions/${qid}/update-test-cases`, {
+    const response = await authenticatedFetch(`${api}/questions/${qid}/update-test-cases`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(testCases),
     });
@@ -207,13 +210,11 @@ export const updateTestCases = async (qid, testCases) => {
 
 // SUBMISSION API
 export const submitAnswer = async (question_id, code, status) => {
-  const token = localStorage.getItem("auth_token");
   try {
-    const response = await fetch(`${api}/submissions/`, {
+    const response = await authenticatedFetch(`${api}/submissions/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         question_id: question_id,
@@ -233,13 +234,9 @@ export const submitAnswer = async (question_id, code, status) => {
 };
 
 export const fetchSubmissions = async (question_id) => {
-  const token = localStorage.getItem("auth_token");
   try {
-    const response = await fetch(`${api}/submissions/latest/${question_id}`, {
+    const response = await authenticatedFetch(`${api}/submissions/latest/${question_id}`, {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     });
     if (!response.ok) {
       throw new Error("Failed to fetch submissions");
