@@ -69,10 +69,10 @@ const AddTestCases = () => {
               ? JSON.parse(caseItem.expected_output)
               : caseItem.expected_output;
 
-          const expectedOutput = { result: parsedOutputValue };
+          
           return {
             input_data: inputData,
-            expected_output: expectedOutput,
+            expected_output: parsedOutputValue,
           };
         } catch (error) {
           parsingError = true;
@@ -155,11 +155,7 @@ const AddTestCases = () => {
                     <JSONEditor
                       value={
                         typeof test_case.expected_output === "object"
-                          ? JSON.stringify(
-                              test_case.expected_output.result,
-                              null,
-                              2,
-                            )
+                          ? JSON.stringify(test_case.expected_output, null, 2)
                           : test_case.expected_output || ""
                       }
                       onChange={(value) =>
