@@ -208,6 +208,7 @@ const CreateQuestion = () => {
                   type="submit"
                   className="w-fit"
                   onClick={handleSubmit}
+                  loading={isUploading}
                 />
               </form>
             </div>

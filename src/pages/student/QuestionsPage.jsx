@@ -2,7 +2,7 @@ import BackButton from "../../components/button/BackButton";
 import ReactMarkdown from "react-markdown";
 import terminalLogo from "./../../assets/icon/terminal.svg";
 import TextEditor from "../../components/card/TextEditor";
-import { act, use, useState } from "react";
+import { useState } from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -13,7 +13,6 @@ import {
 import PrimaryButton from "../../components/button/PrimaryButton";
 import { compileCode } from "./../../service/api";
 import TestCases from "../../components/card/TestCases";
-import SecondaryButton from "../../components/button/SecondaryButton";
 import remarkGfm from "remark-gfm";
 
 const QuestionsPage = () => {
@@ -23,6 +22,8 @@ const QuestionsPage = () => {
   const [output, setOutput] = useState("");
   const [testResult, setTestResult] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getQuesiontDetails = async (qid) => {
@@ -49,6 +50,8 @@ const QuestionsPage = () => {
           "No previous submission found (or error fetching), using default code.",
           error,
         );
+      } finally {
+        setIsLoading(false);
       }
     };
     getQuesiontDetails(qid);
@@ -123,6 +126,7 @@ const QuestionsPage = () => {
 
   const handleRun = async (e) => {
     e.preventDefault();
+    setIsRunning(true);
     setOutput("Compiling...");
 
     try {
@@ -143,11 +147,17 @@ const QuestionsPage = () => {
     } else {
       setOutput(JSON.stringify(result, null, 2));
     }
+    setIsRunning(false);
   };
 
   return (
     <div className="flex flex-col w-screen h-screen p-16 bg-slate-950 scroll-smooth overflow-hidden">
-      <div className="max-w-[1440px] w-full h-full flex flex-col mx-auto gap-2">
+      {isLoading ? (
+        <div className="flex items-center justify-center h-full">
+          <p className="text-white text-xl">Loading question...</p>
+        </div>
+      ) : (
+        <div className="max-w-[1440px] w-full h-full flex flex-col mx-auto gap-2">
         {/* title  */}
         <div className="w-full flex flex-row gap-4 items-center justify-start">
           <BackButton />
@@ -224,13 +234,15 @@ const QuestionsPage = () => {
                   text="Run Code"
                   primaryColor="noColor"
                   onClick={handleRun}
+                  loading={isRunning}
                 />
-                <PrimaryButton text="Submit Answer" onClick={handleSubmit} />
+                <PrimaryButton text="Submit Answer" onClick={handleSubmit} loading={isSubmitting} />
               </div>
             </div>
           </div>
         </div>
-      </div>
+        </div>
+      )}
     </div>
   );
 };

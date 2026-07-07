@@ -19,6 +19,8 @@ const SubmissionList = () => {
         });
       } catch (error) {
         console.error("Error fetching submissions:", error);
+      } finally {
+        setLoading(false);
       }
     };
     getSubmissions();
@@ -32,15 +34,21 @@ const SubmissionList = () => {
           <LogoutButton />
 
           <div className="w-full mt-6 flex flex-col gap-4">
-            {submissions.map((submission) => (
-              <SubmissionCard
-                key={submission.id}
-                username={submission.username}  
-                status={submission.status}
-                full_name={submission.full_name}
-                submissionId={submission.id}
-                />
-            ))}
+            {loading ? (
+              <p className="text-white text-center py-8">Loading submissions...</p>
+            ) : submissions.length === 0 ? (
+              <p className="text-white text-center py-8">No submissions yet.</p>
+            ) : (
+              submissions.map((submission) => (
+                <SubmissionCard
+                  key={submission.id}
+                  username={submission.username}
+                  status={submission.status}
+                  full_name={submission.full_name}
+                  submissionId={submission.id}
+                  />
+              ))
+            )}
           </div>
         </div>
       </SecondaryBackground>

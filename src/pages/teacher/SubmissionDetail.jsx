@@ -7,7 +7,7 @@ import TestCases from "../../components/card/TestCases";
 import BackButton from "../../components/button/BackButton";
 
 const SubmissionDetail = () => {
-  const { qid, submissionId } = useParams();
+  const { submissionId } = useParams();
   const [submission, setSubmission] = useState(null);
   const [code, setCode] = useState("");
   const [testResult, setTestResult] = useState([]);
@@ -61,8 +61,11 @@ const SubmissionDetail = () => {
 
   return (
     <div className="flex flex-col w-screen h-screen p-16 bg-slate-950 scroll-smooth overflow-hidden">
-      {loading && <div>loading...</div>}
-      {!loading && submission && (
+      {loading ? (
+        <div className="flex items-center justify-center h-full">
+          <p className="text-white text-xl">Loading submission...</p>
+        </div>
+      ) : (
         <div className="max-w-[1440px] w-full h-full flex flex-col mx-auto gap-2">
           {/* Title */}
           <div className="w-full flex flex-row gap-4 items-center justify-start">

@@ -9,8 +9,9 @@ import { useState } from "react";
 
 
 const TeacherDashboard = () => {
-  
+
   const [questions, setQuestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleDelete = (deleteId) => {
     setQuestions(questions.filter((question) => question.id !== deleteId));
@@ -24,6 +25,8 @@ const TeacherDashboard = () => {
         setQuestions(data);
       } catch (error) {
         console.error("Error fetching questions:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     getQuestions();
@@ -45,15 +48,21 @@ const TeacherDashboard = () => {
             />
           </div>
           <div className="w-full mt-6 flex flex-col gap-4">
-            {questions.map((question) => (
-              <QuestionsEditable
-                key={question.id}
-                title={question.title}
-                description={question.description}
-                qid={question.id}
-                onDelete={handleDelete}
-              />
-            ))}
+            {isLoading ? (
+              <p className="text-white text-center py-8">Loading questions...</p>
+            ) : questions.length === 0 ? (
+              <p className="text-white text-center py-8">No questions yet.</p>
+            ) : (
+              questions.map((question) => (
+                <QuestionsEditable
+                  key={question.id}
+                  title={question.title}
+                  description={question.description}
+                  qid={question.id}
+                  onDelete={handleDelete}
+                />
+              ))
+            )}
           </div>
         </div>
       </SecondaryBackground>

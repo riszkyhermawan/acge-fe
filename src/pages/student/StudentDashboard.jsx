@@ -7,15 +7,18 @@ import { fetchQuestions } from "../../service/api";
 
 const StudentDashboard = () => {
     const [questions, setQuestions] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
       const getQuestions = async () => {
         try {
-          const data = await fetchQuestions();  
+          const data = await fetchQuestions();
           console.log("Fetched questions:", data);
           setQuestions(data);
         } catch (error) {
           console.error("Error fetching questions:", error);
+        } finally {
+          setIsLoading(false);
         }
       };
       getQuestions();
@@ -28,9 +31,15 @@ const StudentDashboard = () => {
         <div className="flex flex-col items-center justify-center w-[1200px] self-start mt-48 ">
             <LogoutButton />
             <div className="w-full mt-12 flex flex-col gap-4">
-                {questions.map((question) => (
+                {isLoading ? (
+                  <p className="text-white text-center py-8">Loading questions...</p>
+                ) : questions.length === 0 ? (
+                  <p className="text-white text-center py-8">No questions available.</p>
+                ) : (
+                  questions.map((question) => (
                     <QuestionsCard key={question.id} title={question.title} description={question.description} qid={question.id} />
-                ))}
+                  ))
+                )}
             </div>
         </div>
       </PrimaryBackground>
