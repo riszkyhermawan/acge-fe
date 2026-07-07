@@ -16,6 +16,7 @@ const RegisterPage = () => {
     username: "",
   })
   const [formError, setFormError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const Auth = useAuth();
   const { register } = Auth;
   const navigate = useNavigate();
@@ -66,15 +67,16 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError(null);
-    
-    const isFormEmpty = !username 
+
+    const isFormEmpty = !username
     const hasErrors = Object.values(error).some((errorMsg) => errorMsg !== "");
     if (hasErrors || isFormEmpty) {
         validateField("username", username);
         setFormError("Please fix the errors in the form before submitting.");
         return;
     }
-    
+
+    setIsLoading(true);
     try {
         await register(username, fullName, password);
         setIsModalOpen(true);
@@ -84,6 +86,8 @@ const RegisterPage = () => {
         }, 2000);
     } catch (error) {
         setFormError("Registration failed: " + error.message);
+    } finally {
+        setIsLoading(false);
     }
 
 
@@ -105,6 +109,7 @@ const RegisterPage = () => {
                 placeholder="Please enter your NIM"
                 error={error.username}
                 name="username"
+                disabled={isLoading}
               />
               <SimpleInput
                 label="Full Name"
@@ -113,6 +118,7 @@ const RegisterPage = () => {
                 onChange={(e) => handleChange(e)}
                 placeholder="Please enter your full name"
                 name="fullName"
+                disabled={isLoading}
               />
               <SimpleInput
                 label="Password"
@@ -121,14 +127,9 @@ const RegisterPage = () => {
                 onChange={(e) => handleChange(e)}
                 placeholder="Please enter your password"
                 name="password"
+                disabled={isLoading}
               />
-              {/* <button
-                className="w-full p-6 bg-emerald-500 text-white font-bold text-md rounded-xl mt-4"
-                type="submit"
-              >
-                Submit
-              </button> */}
-              <PrimaryButton text="Submit" type="submit" className="w-fit" />
+              <PrimaryButton text="Submit" type="submit" className="w-fit" loading={isLoading} />
               {formError && <p className="text-red-500">{formError}</p>}
               <a href="/login" className="mt-4 text-blue-500 underline">
                 Already have an account? Login here.

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import PrimaryBackground from "../../components/PrimaryBackground";
+import SecondaryBackground from "../../components/SecondaryBackground";
 import MDEditor from "@uiw/react-md-editor";
 import { useState } from "react";
 import { commands } from "@uiw/react-md-editor";
@@ -9,8 +9,6 @@ import PrimaryButton from "../../components/button/PrimaryButton";
 import { useNavigate } from "react-router-dom";
 import { getQuestionById } from "../../service/api";
 import { useParams } from "react-router-dom";
-import SecondaryButton from "../../components/button/SecondaryButton";
-import SecondaryBackground from "../../components/SecondaryBackground";
 import SmallModal from "../../components/modal/SmallModal";
 
 const EditQuestion = () => {
@@ -22,6 +20,7 @@ const EditQuestion = () => {
   const [attachment, setAttachment] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadFileName, setUploadFileName] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const navigate = useNavigate();
@@ -40,6 +39,8 @@ const EditQuestion = () => {
         }
       } catch (error) {
         console.error("Error fetching question details:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     getQuesiontDetails(qid);
@@ -107,7 +108,7 @@ const EditQuestion = () => {
       //debugging
       // console.log("Ready to send to backend:", payload);
       setShowSuccessModal(true);
-      const response = await updateQuestion(qid, payload);
+      await updateQuestion(qid, payload);
       //debugging
       // console.log("Response from backend:", response);
     } catch (error) {
@@ -124,7 +125,10 @@ const EditQuestion = () => {
         <div className="flex flex-col items-center justify-center w-[1200px] self-start mt-36 ">
           <h1 className="text-4xl font-bold ">Edit Question ID: {qid}</h1>
           <div className="w-full min-h-[600px] bg-[#1E1E1E] mt-4 rounded-lg flex flex-col items-start justify-start p-6">
-            <div className="w-full" data-color-mode="dark">
+            {isLoading ? (
+              <p className="text-white text-center py-8 w-full">Loading question...</p>
+            ) : (
+              <div className="w-full" data-color-mode="dark">
               <form className="w-full mb-4">
                 {/* Title */}
                 <h1 className="text-start text-xl font-bold">Title</h1>
@@ -233,10 +237,12 @@ const EditQuestion = () => {
                     type="submit"
                     className="w-full"
                     onClick={handleSubmit}
+                    loading={isUploading}
                   />
                 </div>
               </form>
             </div>
+            )}
           </div>
         </div>
         <SmallModal

@@ -9,6 +9,7 @@ import PrimaryButton from "../../components/button/PrimaryButton";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const Auth = useAuth();
   const { login } = Auth;
   const [error, setError] = useState(null);
@@ -17,6 +18,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    setIsLoading(true);
     try {
       const userData = await login(username, password);
       if (userData.role === "teacher") {
@@ -26,11 +28,12 @@ const Login = () => {
       }
     } catch (error) {
       setError("Login failed: " + error.message);
-      throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  
+
   return (
     <PrimaryBackground>
       <div className="w-7xl flex items-center justify-center gap-24 ">
@@ -44,6 +47,7 @@ const Login = () => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Please enter your NIM"
+                disabled={isLoading}
               />
               <SimpleInput
                 label="Password"
@@ -51,14 +55,9 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Please enter your password"
+                disabled={isLoading}
               />
-              {/* <button
-                className="w-full p-6 bg-emerald-500 text-white font-bold text-md rounded-xl mt-4"
-                type="submit"
-              >
-                Login
-              </button> */}
-              <PrimaryButton text="Login" type="submit" className="w-fit" />
+              <PrimaryButton text="Login" type="submit" className="w-fit" loading={isLoading} />
               {error && <p className="text-red-500">{error}</p>}
               <a href="/register" className="mt-4 text-blue-500 underline">
                 Don't have an account? Register here.

@@ -10,6 +10,8 @@ import SmallModal from "../../components/modal/SmallModal";
 const AddTestCases = () => {
   const { qid } = useParams();
   const [test_cases, setTestCases] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   const navigate = useNavigate();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
@@ -28,6 +30,8 @@ const AddTestCases = () => {
         setTestCases([...test_cases, {}]);
       } catch (error) {
         console.error("Failed to fetch question data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -87,6 +91,7 @@ const AddTestCases = () => {
     }
 
     console.log("We're gonna send this", preparedTestCases);
+    setIsSaving(true);
     try {
       await updateTestCases(qid, preparedTestCases);
       setShowSuccessModal(true);
@@ -94,6 +99,8 @@ const AddTestCases = () => {
       console.error("Failed to update test cases:", error);
       setErrorModalMessage("Failed to update test cases. Please try again.");
       setShowErrorModal(true);
+    } finally {
+      setIsSaving(false);
     }
 
     
@@ -114,75 +121,70 @@ const AddTestCases = () => {
                 </p>
               </div>
               <form onSubmit={handleSubmit}>
-                {test_cases.map((test_case, index) => (
-                  <div className="w-full mb-4" key={index}>
-                    <div className="flex flex-row w-full justify-between ">
-                      <h2 className="text-2xl font-bold">
-                        {" "}
-                        Test Case {index + 1}
-                      </h2>
-                      {index < test_cases.length && (
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteTestCase(index)}
-                          className="text-red-500 hover:text-red-700 font-semibold transition-colors duration-200 p-2"
-                        >
-                          Delete
-                        </button>
-                      )}
+                {isLoading ? (
+                  <p className="text-white text-center py-8">Loading test cases...</p>
+                ) : (
+                  <>
+                    {test_cases.map((test_case, index) => (
+                      <div className="w-full mb-4" key={index}>
+                        <div className="flex flex-row w-full justify-between ">
+                          <h2 className="text-2xl font-bold">
+                            {" "}
+                            Test Case {index + 1}
+                          </h2>
+                          {index < test_cases.length && (
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteTestCase(index)}
+                              className="text-red-500 hover:text-red-700 font-semibold transition-colors duration-200 p-2"
+                            >
+                              Delete
+                            </button>
+                          )}
+                        </div>
+
+                        <label className="text-white font-semibold mt-4">
+                          Input:
+                        </label>
+                        <JSONEditor
+                          value={
+                            typeof test_case.input_data === "object"
+                              ? JSON.stringify(test_case.input_data, null, 2)
+                              : test_case.input_data || ""
+                          }
+                          onChange={(value) =>
+                            handleInputChange(index, "input_data", value)
+                          }
+                          placeholder='{ "variable": "value" }'
+                        />
+
+                        <label className="text-white font-semibold mt-4">
+                          Output:
+                        </label>
+                        <JSONEditor
+                          value={
+                            typeof test_case.expected_output === "object"
+                              ? JSON.stringify(test_case.expected_output, null, 2)
+                              : test_case.expected_output || ""
+                          }
+                          onChange={(value) =>
+                            handleInputChange(index, "expected_output", value)
+                          }
+                          placeholder='{ "variable": "value" }'
+                        />
+                      </div>
+                    ))}
+                    <div className="flex flex-row gap-4 justify-between w-full">
+                      <PrimaryButton
+                        text="Add another Test Case"
+                        onClick={handleTestCases}
+                        primaryColor="noColor"
+                        type="button"
+                      />
+                      <PrimaryButton text="Save Test Cases" type="submit" loading={isSaving} />
                     </div>
-
-                    {/* Input */}
-                    <label className="text-white font-semibold mt-4">
-                      Input:
-                    </label>
-                    <JSONEditor
-                      value={
-                        typeof test_case.input_data === "object"
-                          ? JSON.stringify(test_case.input_data, null, 2)
-                          : test_case.input_data || ""
-                      }
-                      onChange={(value) =>
-                        handleInputChange(index, "input_data", value)
-                      }
-                      placeholder='{ "variable": "value" }'
-                    />
-
-                    {/* Output */}
-                    <label className="text-white font-semibold mt-4">
-                      Output:
-                    </label>
-                    <JSONEditor
-                      value={
-                        typeof test_case.expected_output === "object"
-                          ? JSON.stringify(test_case.expected_output, null, 2)
-                          : test_case.expected_output || ""
-                      }
-                      onChange={(value) =>
-                        handleInputChange(index, "expected_output", value)
-                      }
-                      placeholder='{ "variable": "value" }'
-                    />
-
-                    {/* Button */}
-                  </div>
-                ))}
-                <div className="flex flex-row gap-4 justify-between w-full">
-                  {/* <button
-                    type="button"
-                    onClick={handleTestCases}
-                    className="w-fit py-2 px-6 rounded-full shadow-md inline-flex items-center border-2 border-primary-green text-primary-green hover:bg-primary-green-dark transition-all duration-300 ease-in-out font-bold text-md cursor-pointer"
-                  >
-                    + Add Another Test Case
-                  </button> */}
-                  <PrimaryButton
-                    text="Add another Test Case"
-                    onClick={handleTestCases}
-                    primaryColor="noColor"
-                    type="button"
-                  />
-                  <PrimaryButton text="Save Test Cases" type="submit" />
-                </div>
+                  </>
+                )}
               </form>
             </div>
           </div>
