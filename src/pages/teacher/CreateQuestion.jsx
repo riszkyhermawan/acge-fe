@@ -1,13 +1,12 @@
 import React from "react";
 import PrimaryBackground from "../../components/PrimaryBackground";
-import MDEditor from "@uiw/react-md-editor";
 import { useState } from "react";
-import { commands } from "@uiw/react-md-editor";
 import { supabase } from "../../service/supabaseClient";
 import { createQuestions } from "../../service/api";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import { useNavigate } from "react-router-dom";
 import SmallModal from "../../components/modal/SmallModal";
+import PlainEditor from "../../components/card/PlainEditor";
 
 const CreateQuestion = () => {
   const [title, setTitle] = useState("");
@@ -114,35 +113,13 @@ const CreateQuestion = () => {
 
                 {/* Description */}
                 <h1 className="text-start text-xl font-bold">Description</h1>
-                <MDEditor
-                  value={description}
-                  onChange={setDescription}
-                  height={250}
-                  style={{
-                    width: "100%",
-                    marginTop: "16px",
-                    borderRadius: "8px",
-                    backgroundColor: "#363636",
-                    color: "white",
-                  }}
-                  preview="edit"
-                  commands={[
-                    commands.bold,
-                    commands.italic,
-                    commands.strikethrough,
-                    commands.hr,
-                    commands.title,
-                    commands.divider,
-                    commands.link,
-                    commands.quote,
-                    commands.code,
-                    commands.unorderedListCommand,
-                    commands.orderedListCommand,
-                    commands.checkedListCommand,
-                    commands.codeBlock,
-                    commands.table,
-                  ]}
-                />
+                <div className="mt-2 h-[250px]">
+                  <PlainEditor
+                    value={description}
+                    onChange={setDescription}
+                    placeholder="Write your question here..."
+                  />
+                </div>
 
                 {/* Attachment */}
                 <div className="col-span-full mt-4">

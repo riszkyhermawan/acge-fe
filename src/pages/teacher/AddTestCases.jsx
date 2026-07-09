@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useParams } from "react-router-dom";
 import SecondaryBackground from "../../components/SecondaryBackground";
 import { getQuestionById, updateTestCases } from "../../service/api";

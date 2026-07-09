@@ -1,7 +1,6 @@
 import PrimaryBackground from "../../components/PrimaryBackground";
 import LogoutButton from "./../../components/button/LogoutButton";
 import QuestionsCard from "../../components/card/QuestionsCard";
-import { Questions } from "./../../Data/Questions";
 import { useState, useEffect } from "react";
 import { fetchQuestions } from "../../service/api";
 
@@ -28,9 +27,9 @@ const StudentDashboard = () => {
   return (
     <>
       <PrimaryBackground>
-        <div className="flex flex-col items-center justify-center w-[1200px] self-start mt-48 ">
+        <div className="flex flex-col items-center justify-center w-full max-w-[1200px] self-start m-24 sm:mt-32 lg:mt-48 px-4 sm:px-6 lg:px-8">
             <LogoutButton />
-            <div className="w-full mt-12 flex flex-col gap-4">
+            <div className="w-full mt-8 lg:mt-12 flex flex-col gap-4">
                 {isLoading ? (
                   <p className="text-white text-center py-8">Loading questions...</p>
                 ) : questions.length === 0 ? (
