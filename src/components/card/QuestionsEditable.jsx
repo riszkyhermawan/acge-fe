@@ -18,25 +18,22 @@ const QuestionsEditable = ({ title, description, qid, onDelete }) => {
   };
 
   return (
-    <div className="flex flex-row items-center justify-between bg-black-400/25 bg-clip-padding backdrop-filter backdrop-blur-lg border-2 border-gray-100 rounded-2xl shadow-md px-6 py-4">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-black-400/25 bg-clip-padding backdrop-filter backdrop-blur-lg border-2 border-gray-100 rounded-2xl shadow-md px-4 sm:px-6 py-4 gap-4">
       <div className="w-full text-white flex flex-col px-2 pb-2">
-        <h1 className="text-2xl font-bold mb-4">{title}</h1>
-        <p className="text-md line-clamp-1">{description}</p>
+        <h1 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">{title}</h1>
+        <p className="text-sm sm:text-md line-clamp-2 sm:line-clamp-1">{description}</p>
       </div>
-      <div className="w-fit h-full justify-center items-end flex flex-col  ">
-        <span className="bg-yellow-100 text-yellow-800 w-fit text-base font-semibold px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
+      <div className="w-full sm:w-fit h-full justify-start sm:justify-end items-start sm:items-end flex flex-row sm:flex-col gap-2">
+        <span className="bg-yellow-100 text-yellow-800 w-fit text-sm sm:text-base font-semibold px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">
           ID : {qid}
         </span>
-        <div className="flex flex-row gap-2 mt-2">
+        <div className="flex flex-row gap-2">
           <Link
             to={`/teacher/questions/${qid}/submissions`}
             className="p-1 bg-[#1E2C20] items-center justify-center hover:bg-[#425D46] rounded-lg"
           >
             <img src={openIcon} alt="open" className="w-[28px] " />
           </Link>
-          {/* <button className="p-1 bg-[#1E2C20] items-center justify-center hover:bg-[#425D46] rounded-lg">
-            <img src={openIcon} alt="open" className="w-[28px] " />
-          </button> */}
           <Link
             to={`/teacher/questions/edit-question/${qid}`}
             className="p-1 bg-[#4B420D] items-center justify-center hover:bg-[#918016] rounded-lg"

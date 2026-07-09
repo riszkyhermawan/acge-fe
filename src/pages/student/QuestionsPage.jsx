@@ -1,9 +1,7 @@
 import BackButton from "../../components/button/BackButton";
-import ReactMarkdown from "react-markdown";
 import terminalLogo from "./../../assets/icon/terminal.svg";
 import TextEditor from "../../components/card/TextEditor";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   getQuestionById,
@@ -13,7 +11,6 @@ import {
 import PrimaryButton from "../../components/button/PrimaryButton";
 import { compileCode } from "./../../service/api";
 import TestCases from "../../components/card/TestCases";
-import remarkGfm from "remark-gfm";
 
 const QuestionsPage = () => {
   const { qid } = useParams();
@@ -66,7 +63,7 @@ const QuestionsPage = () => {
     return cleanOutput === expectedValue;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async () => {
     setIsSubmitting(true);
     setTestResult([]);
     setOutput("Submitting...");
@@ -151,96 +148,91 @@ const QuestionsPage = () => {
   };
 
   return (
-    <div className="flex flex-col w-screen h-screen p-16 bg-slate-950 scroll-smooth overflow-hidden">
+    <div className="flex flex-col w-full min-h-screen bg-slate-950 scroll-smooth">
       {isLoading ? (
-        <div className="flex items-center justify-center h-full">
+        <div className="flex items-center justify-center h-screen">
           <p className="text-white text-xl">Loading question...</p>
         </div>
       ) : (
-        <div className="max-w-[1440px] w-full h-full flex flex-col mx-auto gap-2">
-        {/* title  */}
-        <div className="w-full flex flex-row gap-4 items-center justify-start">
-          <BackButton />
-          <h1 className="text-4xl font-bold  text-center">{question.title}</h1>
-        </div>
-
-        <div className="flex-1 w-full flex flex-row gap-2">
-          {/* Left side: Text Editor + Terminal  */}
-          <div className="flex flex-col gap-2 flex-1">
-            {/* Text Editor */}
-            <TextEditor
-              className="w-full"
-              code={codeInput}
-              onCodeChange={setCodeInput}
-            />
-
-            {/* Terminal (1/4) */}
-            <div className="h-[25%] bg-surface-dark p-4 rounded-2xl">
-              <h1>
-                <img
-                  src={terminalLogo}
-                  alt="output"
-                  className="w-6 h-6 inline-block mr-2 mb-1"
-                />
-                Output
-              </h1>
-              <p className="text-[16px] text-white">{output}</p>
-            </div>
+        <div className="flex flex-col h-screen max-w-[1440px] w-full mx-auto p-4 sm:p-6 md:p-8 lg:p-12 xl:p-16 gap-2">
+          <div className="shrink-0 flex flex-row gap-3 sm:gap-4 items-center justify-start flex-wrap">
+            <BackButton />
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">
+              {question.title}
+            </h1>
           </div>
 
-          {/* Right side: Question + TestCases*/}
-          <div className="w-1/3 flex flex-col gap-2">
-            {/* Question */}
-            <div className="bg-surface-dark rounded-2xl p-4 h-1/2 flex flex-col">
-              <h1 className="text-xl font-bold mb-2 text-center shrink-0">
-                Question
-              </h1>
+          <div className="flex-1 min-h-0 flex flex-col sm:flex-row gap-2">
+            <div className="flex flex-col gap-2 w-full sm:w-2/3 h-full min-h-0">
+              <div className="flex-1 min-h-0">
+                <TextEditor
+                  className="w-full h-full"
+                  code={codeInput}
+                  onCodeChange={setCodeInput}
+                />
+              </div>
+              <div className="h-1/4 min-h-[100px] bg-surface-dark p-3 sm:p-4 rounded-2xl flex flex-col">
+                <h1 className="shrink-0 text-sm sm:text-base font-semibold mb-1 sm:mb-2 flex items-center gap-1 sm:gap-2">
+                  <img
+                    src={terminalLogo}
+                    alt="output"
+                    className="w-4 sm:w-5 h-4 sm:h-5"
+                  />
+                  Output
+                </h1>
+                <p className="text-sm sm:text-base text-white whitespace-pre-wrap break-words overflow-auto flex-1">
+                  {output}
+                </p>
+              </div>
+            </div>
 
-              <div className="flex-1 overflow-auto scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar hover:scrollbar-thumb-slate-100/10 scrollbar-track-transparent">
-                <div className="flex flex-col gap-2  justify-between">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            <div className="flex flex-col gap-2 w-full sm:w-1/3 h-full min-h-0">
+              <div className="h-2/3 bg-surface-dark rounded-2xl overflow-hidden flex flex-col min-h-0">
+                <h1 className="shrink-0 text-base sm:text-lg md:text-xl font-bold mb-2 text-center p-3 sm:p-4">
+                  Question
+                </h1>
+                <div className="flex-1 overflow-auto p-4 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar hover:scrollbar-thumb-slate-100/10 scrollbar-track-transparent">
+                  <pre className="text-zinc-300 text-[15px] leading-relaxed font-mono whitespace-pre-wrap break-words">
                     {question.description}
-                  </ReactMarkdown>
+                  </pre>
                 </div>
-              </div>
-              {console.log("Attachment URL:", question.attachment_url)}
-              {question.attachment_url && (
-                <div className="pt-4 mt-auto shrink-0 w-full flex bg-surface-dark">
-                  <a
-                    href={question.attachment_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-fit mt-2 py-2 px-6 rounded-full shadow-md inline-flex items-center border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300"
-                  >
-                    <p className="text-center mx-auto font-bold text-md">
+                {question.attachment_url && (
+                  <div className="shrink-0 p-3 sm:p-4">
+                    <a
+                      href={question.attachment_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-fit mt-2 py-1.5 sm:py-2 px-4 sm:px-6 rounded-full shadow-md inline-flex items-center border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300 text-sm sm:text-base font-bold"
+                    >
                       Show Attachment
-                    </p>
-                  </a>
-                </div>
-              )}
-            </div>
-
-            {/*Test Cases */}
-            <div className="bg-surface-dark p-2 rounded-2xl flex-1 flex flex-col">
-              <div className="flex-1 overflow-auto scroll-smooth scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar hover:scrollbar-thumb-slate-100/10 scrollbar-track-transparent">
-                <TestCases
-                  test_cases={question.test_cases}
-                  results={testResult}
-                />
+                    </a>
+                  </div>
+                )}
               </div>
 
-              <div className="pt-4 pb-2 mt-auto shrink-0 w-full flex flex-row gap-4 bg-surface-dark">
-                <PrimaryButton
-                  text="Run Code"
-                  primaryColor="noColor"
-                  onClick={handleRun}
-                  loading={isRunning}
-                />
-                <PrimaryButton text="Submit Answer" onClick={handleSubmit} loading={isSubmitting} />
+              <div className="h-1/3 min-h-[120px] bg-surface-dark p-2 sm:p-3 rounded-2xl flex flex-col">
+                <div className="flex-1 overflow-auto scroll-smooth scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar hover:scrollbar-thumb-slate-100/10 scrollbar-track-transparent">
+                  <TestCases
+                    test_cases={question.test_cases}
+                    results={testResult}
+                  />
+                </div>
+                <div className="shrink-0 pt-2 sm:pt-3 pb-1 flex flex-col sm:flex-row gap-2">
+                  <PrimaryButton
+                    text="Run"
+                    primaryColor="noColor"
+                    onClick={handleRun}
+                    loading={isRunning}
+                  />
+                  <PrimaryButton
+                    text="Submit"
+                    onClick={handleSubmit}
+                    loading={isSubmitting}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
         </div>
       )}
     </div>

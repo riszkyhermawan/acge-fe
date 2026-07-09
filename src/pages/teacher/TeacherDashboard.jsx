@@ -1,11 +1,9 @@
-import { use, useEffect } from "react";
+import { useEffect, useState } from "react";
 import SecondaryBackground from "../../components/SecondaryBackground";
 import LogoutButton from "../../components/button/LogoutButton";
 import SecondaryButton from "../../components/button/SecondaryButton";
 import QuestionsEditable from "../../components/card/QuestionsEditable";
-// import { Questions } from "../../Data/Questions";
 import { fetchQuestions } from "../../service/api";
-import { useState } from "react";
 
 
 const TeacherDashboard = () => {
@@ -37,12 +35,12 @@ const TeacherDashboard = () => {
   return (
     <>
       <SecondaryBackground>
-        <div className="flex flex-col items-center justify-center w-[1200px] self-start mt-4 ">
+        <div className="flex flex-col items-center justify-center w-full max-w-[1200px] self-start mt-4 px-4 sm:px-6 lg:px-8">
             <LogoutButton />
-          <div className="flex flex-row w-[1200px] gap-4 justify-between items-center h-fit mt-12">
-            <h1 className="text-4xl font-bold ">Question Lists</h1>
+          <div className="flex flex-row w-full gap-4 justify-between items-center h-fit mt-8 lg:mt-12">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">Question Lists</h1>
             <SecondaryButton
-              text="+ Create New Question"
+              text="+ Create"
               primaryColor="green"
               link="/teacher/dashboard/create-question"
             />

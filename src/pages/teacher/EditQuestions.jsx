@@ -1,8 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import SecondaryBackground from "../../components/SecondaryBackground";
-import MDEditor from "@uiw/react-md-editor";
-import { useState } from "react";
-import { commands } from "@uiw/react-md-editor";
 import { supabase } from "../../service/supabaseClient";
 import { updateQuestion } from "../../service/api";
 import PrimaryButton from "../../components/button/PrimaryButton";
@@ -10,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { getQuestionById } from "../../service/api";
 import { useParams } from "react-router-dom";
 import SmallModal from "../../components/modal/SmallModal";
+import PlainEditor from "../../components/card/PlainEditor";
 
 const EditQuestion = () => {
   const { qid } = useParams();
@@ -142,35 +140,13 @@ const EditQuestion = () => {
 
                 {/* Description */}
                 <h1 className="text-start text-xl font-bold">Description</h1>
-                <MDEditor
-                  value={description}
-                  onChange={setDescription}
-                  height={250}
-                  style={{
-                    width: "100%",
-                    marginTop: "16px",
-                    borderRadius: "8px",
-                    backgroundColor: "#363636",
-                    color: "white",
-                  }}
-                  preview="edit"
-                  commands={[
-                    commands.bold,
-                    commands.italic,
-                    commands.strikethrough,
-                    commands.hr,
-                    commands.title,
-                    commands.divider,
-                    commands.link,
-                    commands.quote,
-                    commands.code,
-                    commands.unorderedListCommand,
-                    commands.orderedListCommand,
-                    commands.checkedListCommand,
-                    commands.codeBlock,
-                    commands.table,
-                  ]}
-                />
+                <div className="mt-2 h-[250px]">
+                  <PlainEditor
+                    value={description}
+                    onChange={setDescription}
+                    placeholder="Write your question here..."
+                  />
+                </div>
 
                 {/* Attachment */}
                 <div className="col-span-full mt-4">
@@ -180,19 +156,6 @@ const EditQuestion = () => {
                   {!uploadFileName ? (
                     <div className="mt-2 flex justify-center rounded-lg border border-dashed border-white/25 px-6 py-10">
                       <div className="text-center">
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          data-slot="icon"
-                          aria-hidden="true"
-                          className="mx-auto size-12 text-gray-600"
-                        >
-                          <path
-                            d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.689a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.061Zm10.125-7.81a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Z"
-                            clipRule="evenodd"
-                            fillRule="evenodd"
-                          />
-                        </svg>
                         <div className="mt-4 flex text-sm/6 text-gray-400">
                           <label
                             htmlFor="file-upload"
