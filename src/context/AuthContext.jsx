@@ -1,5 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
 import {createContext, useContext, useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
 import { login as APIlogin, getMe, register as APIRegister } from '../service/api';
 
 
